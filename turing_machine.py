@@ -17,9 +17,11 @@ def binary_multiplication_turing_machine(multiplier: str, multiplicand: str):
     filename = f"tape_{multiplier}_x_{multiplicand}.dat"
     with open(filename, "w") as f:
         # Initialize the tape (input format: multiplier#multiplicand#$)
-        tape = list("BBBBBBBBBB" + multiplier + "*" + multiplicand)
-        tape.extend(["B"] * 100)
-        head = 10
+        maxsize = len(multiplier) + len(multiplicand)
+        bs = "B"*maxsize
+        tape = list(bs + multiplier + "*" + multiplicand + bs)
+        #tape.extend(["B"] * 20)
+        head = maxsize
         state = "start"
 
         def write_tape():
@@ -29,7 +31,7 @@ def binary_multiplication_turing_machine(multiplier: str, multiplicand: str):
         
         while state != "done":
             symbol = tape[head]
-            print(state, symbol)
+            #print(state, symbol)
             if state == "start":
                 if symbol in "01":
                     head -= 1
@@ -200,8 +202,10 @@ def binary_multiplication_turing_machine(multiplier: str, multiplicand: str):
             write_tape()
 
     print(f"Tape configurations saved to {filename}")
+    return ''.join(tape[:tape.index("B")])
+
 
 # Example usage
-binary_multiplication_turing_machine("11", "101")
-binary_multiplication_turing_machine("101001010111", "101000101")
-binary_multiplication_turing_machine("101111", "101001")
+print(binary_multiplication_turing_machine("11", "101"))
+print(binary_multiplication_turing_machine("101001010111", "101000101"))
+print(binary_multiplication_turing_machine("101111", "101001"))
